@@ -42,6 +42,7 @@
 
   home.sessionVariables = {
     NIXOS_OZONE_WL = 1;
+    ANKI_WAYLAND = 1;
   };
 
 
@@ -56,6 +57,11 @@
       tofi
       moonlight-qt
       networkmanagerapplet
+      unstable.anki-bin
+      thunderbird
+      slack
+      webcord #discord
+      unstable.ticktick
       unstable.vscode
     ];
 
@@ -134,6 +140,8 @@
           "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
           "rog-control-center"
           "nm-applet"
+          "1password --silent"
+          "webcord"
         ];
       bind =
         [
