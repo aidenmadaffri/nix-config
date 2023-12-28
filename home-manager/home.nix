@@ -62,8 +62,15 @@
       slack
       webcord #discord
       unstable.ticktick
-      unstable.vscode
     ];
+
+  programs.vscode = {
+    enable = true;
+    package = pkgs.unstable.vscode;
+    userSettings = {
+      "window.titleBarStyle" = "custom";
+    };
+  }; 
 
   programs.zsh = {
     enable = true;
@@ -132,6 +139,8 @@
     enable = true;
     settings = {
       "$mod" = "SUPER";
+      input.accel_profile = "flat";
+      input.sensitivity = 0.25;
       exec-once =
         [
           "asusctl profile -P \"Quiet\""

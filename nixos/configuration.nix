@@ -92,20 +92,15 @@
   time.timeZone = "America/Chicago";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Window manager
-  #services.xserver = {
-   # enable = true;
-   # layout = "us";
-   # displayManager.gdm.enable = true;
-   # desktopManager.gnome.enable = true;
-   # libinput.enable = true;
-  #};
   programs.hyprland.enable = true;
   programs.hyprland.xwayland.enable = true;
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  services.greetd.enable = true;
-  services.greetd.restart = true;
-  programs.regreet.enable = true;
+
+  xdg.portal.enable = true;
+  xdg.portal.wlr.enable = true;
+  xdg.portal.extraPortals = [
+    pkgs.xdg-desktop-portal-hyprland
+  ];
 
   security.polkit = {
     enable = true;
@@ -159,7 +154,8 @@
     curl
     killall
     polkit_gnome
-    unstable.emacs
+    xdg-desktop-portal-hyprland
+    xdg-utils
   ];
 
   services.tailscale.enable = true;
