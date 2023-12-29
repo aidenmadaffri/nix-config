@@ -31,6 +31,7 @@
   in {
     overlays = import ./overlays {inherit inputs;};
     nixosModules = import ./modules/nixos;
+    homeManagerModules = import ./modules/home-manager;
     nixosConfigurations = {
       aiden-laptop = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};

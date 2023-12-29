@@ -73,6 +73,7 @@
   services.asusd.profileConfig = "Quiet";
 
   # Bootloader
+  # TODO add catppuccin theme
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.device = "nodev";

@@ -8,7 +8,9 @@
   pkgs,
   ...
 }: {
-  # You can import other home-manager modules here
+  disabledModules = [
+    "services/window-managers/hyprland.nix"
+  ];
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
     # outputs.homeManagerModules.example
@@ -18,6 +20,10 @@
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
+    
+    # This is so I get the sourceFirst option
+    # TODO Remove before update of home manager
+    outputs.homeManagerModules.hyprland
   ];
 
   nixpkgs = {
@@ -43,8 +49,8 @@
   home.sessionVariables = {
     NIXOS_OZONE_WL = 1;
     ANKI_WAYLAND = 1;
+    GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
   };
-
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
@@ -62,6 +68,11 @@
       slack
       webcord #discord
       unstable.ticktick
+      xfce.thunar
+      (catppuccin-kvantum.override {
+        accent = "Blue";
+        variant = "Mocha";
+      })
     ];
 
   programs.vscode = {
@@ -100,6 +111,11 @@
         file = "p10k.zsh";
       }
       {
+        name = "zsh-syntax-highlighting-theme";
+        src = ./zsh-syntax-highlighting-theme;
+        file = "catppuccin-mocha.zsh";
+      }
+      {
         name = "zsh-syntax-highlighting";
         src = pkgs.unstable.zsh-syntax-highlighting;
         file = "share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
@@ -132,12 +148,17 @@
   programs.alacritty = {
     enable = true;
     settings = {
+      import = [
+        "${./alacritty/themes/catppuccin-mocha.yml}"
+      ];
       font.normal.family = "MesloLGS NF";
     };
   };
+  xdg.configFile."swaync/style.css".source = ./swaync/catppuccin-mocha.css;
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
+      source = "${./hyprland/themes/catppuccin-mocha.conf}";
       "$mod" = "SUPER";
       input.accel_profile = "flat";
       input.sensitivity = 0.25;
@@ -159,7 +180,7 @@
           "$mod, f, fullscreen, 0"
           "$mod CTRL SHIFT ALT, q, exit"
 
-          "$mod, r, exec, tofi-run | xargs hyprctl dispatch exec --"
+          "$mod, r, exec, tofi-run -c ${./tofi/catppuccin-mocha} | xargs hyprctl dispatch exec --"
 
           "$mod, x, exec, alacritty"
           "$mod, b, exec, google-chrome-stable"
@@ -219,6 +240,27 @@
       };
     }];
     style = builtins.readFile ./waybar/style.css;
+  };
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Catppuccin-Mocha-Standard-Blue-Dark";
+      package = pkgs.catppuccin-gtk.override {
+        accents = [ "blue" ];
+        size = "standard";
+        tweaks = [ ];
+        variant = "mocha";
+      };
+    };
+  };
+  qt = {
+    enable = true;
+    platformTheme = "qtct";
+    style.name = "kvantum";
+  };
+  xdg.configFile."Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini {}).generate "kvantum.kvconfig" {
+    General.theme = "Catppuccin-Mocha-Blue";
   };
 
   programs.ssh = {
