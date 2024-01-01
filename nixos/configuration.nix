@@ -86,6 +86,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub.default = "saved";
+  boot.loader.timeout = 1;
 
   # Fix shebangs by populating /bin
   services.envfs.enable = true;
