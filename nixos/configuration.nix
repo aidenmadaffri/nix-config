@@ -36,11 +36,15 @@
     # You can add overlays here
     overlays = [
       outputs.overlays.unstable-packages
+      inputs.nix-alien.overlays.default
     ];
     # Configure your nixpkgs instance
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
+      permittedInsecurePackages = [
+        "python-2.7.18.7"
+      ];
     };
   };
 
@@ -81,6 +85,7 @@
   boot.supportedFilesystems = [ "ntfs" ];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.grub.default = "saved";
 
   # Fix shebangs by populating /bin
   services.envfs.enable = true;
@@ -153,11 +158,26 @@
     git
     wget
     curl
+    unzip
     killall
     polkit_gnome
     xdg-desktop-portal-hyprland
     xdg-utils
+    nix-alien
+    wineWowPackages.waylandFull
+
+    (let base = pkgs.appimageTools.defaultFhsEnvArgs; in
+      pkgs.buildFHSUserEnv (base // {
+      name = "fhs";
+      targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [pkgs.pkg-config];
+      profile = "export FHS=1";
+      runScript = "zsh";
+      extraOutputsToInstall = ["dev"];
+    }))
   ];
+  services.dbus.packages = [ pkgs.gnome2.GConf ];
+
+  programs.nix-ld.enable = true;
 
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "client";

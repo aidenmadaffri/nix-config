@@ -162,6 +162,7 @@
       "$mod" = "SUPER";
       input.accel_profile = "flat";
       input.sensitivity = 0.25;
+      xwayland.use_nearest_neighbor = false;
       exec-once =
         [
           "asusctl profile -P \"Quiet\""
@@ -241,6 +242,7 @@
     }];
     style = builtins.readFile ./waybar/style.css;
   };
+  xdg.configFile."waybar/theme.css".source = ./waybar/catppuccin-mocha.css;
 
   gtk = {
     enable = true;
